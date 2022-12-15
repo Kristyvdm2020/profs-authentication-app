@@ -10,6 +10,25 @@ const App = ()=> {
   const [loginPassword, setLoginPassword] = useState('');
   const [user, setUser] = useState({});
 
+  useEffect (()=>{
+    const token = window.localStorage.getItem('token');
+    if(token) {
+      console.log(token);
+      fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/me', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      })
+      .then(response => response.json())
+      .then(result => {
+        const user = result.data
+        setUser(user);
+      })
+      .catch(err => console.log(err));
+    }
+  }, []);
+
   const login = (ev) => {
     ev.preventDefault();
     console.log('login');
@@ -28,6 +47,8 @@ const App = ()=> {
     .then(response => response.json())
     .then(result => {
       const token = result.data.token;
+      window.localStorage.setItem('token', token);
+      console.log(token);
       fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/me', {
         headers: {
           'Content-Type': 'application/json',
@@ -65,12 +86,20 @@ const App = ()=> {
   })
   .catch(err => console.log(err));
   }
+  
+  const logout = () => {
+    window.localStorage.removeItem('token');
+    setUser({});
+  }
 
   return (
     <div>
       <h1>Profs Auth App</h1>
       {
-        user._id ? <div>Welcome { user.username}</div> : null
+        user._id ? 
+        <div>Welcome { user.username} 
+          <button onClick={ logout }>Logout</button> 
+        </div> : null
       }
       {
         !user._id ? (
