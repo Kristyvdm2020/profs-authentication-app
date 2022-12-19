@@ -46,6 +46,10 @@ const App = ()=> {
     })
     .then(response => response.json())
     .then(result => {
+      if(!result.success) {
+        console.log(result);
+        throw result.error;
+      }
       const token = result.data.token;
       window.localStorage.setItem('token', token);
       console.log(token);
@@ -82,6 +86,9 @@ const App = ()=> {
   })
   .then(response => response.json())
   .then(result => {
+    if(!result.success) {
+      throw result.error;
+    }
     console.log(result);
   })
   .catch(err => console.log(err));
@@ -97,7 +104,7 @@ const App = ()=> {
       <h1>Profs Auth App</h1>
       {
         user._id ? 
-        <div>Welcome { user.username} 
+        <div>Welcome { user.username } 
           <button onClick={ logout }>Logout</button> 
         </div> : null
       }
