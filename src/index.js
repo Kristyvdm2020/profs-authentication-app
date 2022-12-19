@@ -1,7 +1,8 @@
 import ReactDOM from 'react-dom/client';
 import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Link} from 'react-router-dom';
-import Login from './Login'
+import Login from './Login';
+
 
 const App = ()=> {
   const [registerUsername, setRegisterUsername] = useState('');
@@ -13,7 +14,6 @@ const App = ()=> {
   const exchangeTokenForUser = () => {
     const token = window.localStorage.getItem('token');
     if(token) {
-      console.log(token);
       fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/me', {
         headers: {
           'Content-Type': 'application/json',
